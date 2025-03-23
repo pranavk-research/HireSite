@@ -2,65 +2,33 @@ import pytesseract
 import pdfplumber
 import docx
 from PIL import Image, ImageFilter
-import json
 import os
-from flask import Flask, request
-
-# Flask App Setup
-app = Flask(__name__)
-
-@app.route("/upload", methods=["POST"])
-def upload_file():
-    """Handle file upload via web form."""
-    if "file" not in request.files:
-        return "No file part", 400
-
-    file = request.files["file"]
-
-    # If no file is selected
-    if file.filename == "":
-        return "No selected file", 400
-
-    # Save the file to a specific folder
-    file_path = os.path.join("uploads", file.filename)
-    file.save(file_path)  # Save the file to the server
-
-    # Process the file and extract text
-    file_extension = file.filename.split('.')[-1].lower()
-    
-    if file_extension == 'pdf':
-        return read_pdf(file_path)
-    elif file_extension == 'docx':
-        return read_docx(file_path)
-    elif file_extension in ['jpg', 'jpeg', 'png']:
-        return read_image(file_path)
-    else:
-        return "Unsupported file format", 400
+import re
+from nicegui import ui
 
 
 # File Handling - Text Extraction Functions
 
 def read_pdf(file_path):
-    """Extract text from a PDF and structure it into JSON format."""
+    """Extract text from a PDF and structure it into a string format."""
     text = ""
     with pdfplumber.open(file_path) as pdf:
         for page in pdf.pages:
             text += page.extract_text() + "\n"
 
     structured_data = extract_resume_sections(text)
-    return json.dumps(structured_data, indent=4)
+    return structured_data  # Return as string instead of JSON
 
 def read_docx(file_path):
-    """Extract text from a DOCX file and return structured JSON."""
+    """Extract text from a DOCX file and return as a structured string."""
     doc = docx.Document(file_path)
     text = "\n".join([para.text for para in doc.paragraphs])
 
     structured_data = extract_resume_sections(text)
-    return json.dumps(structured_data, indent=4)
-
+    return structured_data  # Return as string instead of JSON
 
 def read_image(file_path):
-    """Extract text from an image file using OCR and return structured JSON."""
+    """Extract text from an image file using OCR and return structured string."""
     image = Image.open(file_path)
 
     # Preprocessing: Convert image to grayscale
@@ -76,7 +44,7 @@ def read_image(file_path):
     text = pytesseract.image_to_string(image)
 
     structured_data = extract_resume_sections(text)
-    return json.dumps(structured_data, indent=4)
+    return structured_data  # Return as string instead of JSON
 
 
 # Resume Analysis - Section Identification
@@ -84,7 +52,6 @@ def read_image(file_path):
 def extract_resume_sections(text):
     """Identify and split resume text into sections using regex."""
     sections = {
-        "Contact Information": "",
         "Experience": "",
         "Education": "",
         "Skills": "",
@@ -93,7 +60,6 @@ def extract_resume_sections(text):
 
     # Define section patterns (using regular expressions for flexibility)
     section_patterns = {
-        "Contact Information": r"(?:email|phone|address|contact)",
         "Experience": r"(?:experience|professional\s*experience|work\s*history)",
         "Education": r"(?:education|academic\s*history|degrees)",
         "Skills": r"(?:skills|technical\s*skills|competencies)",
@@ -118,34 +84,56 @@ def extract_resume_sections(text):
         if current_section:
             sections[current_section] += line + "\n"
 
-    return sections
+    # Convert sections dictionary to a formatted string
+    result = ""
+    for section, content in sections.items():
+        result += f"{section}:\n{content}\n\n"
+    
+    return result
 
 
-# AI Chat - Placeholder functions for future implementation
+# NiceGUI UI Setup
+upload_folder = "uploads"
+if not os.path.exists(upload_folder):
+    os.makedirs(upload_folder)
 
-def generate_response(query, resume_text):
-    """Answer user queries based on resume content."""
-    pass
+def upload_file(file):
+    """Handle file upload and extract text."""
+    if not file:
+        return "No file selected"
 
-def score_resume(text):
-    """Rank the resume based on predefined criteria."""
-    pass
+    file_path = os.path.join(upload_folder, file.name)
+    file.save(file_path)  # Save the file to the server
 
-def identify_strengths_weaknesses(text):
-    """Identify areas of improvement based on the resume."""
-    pass
+    # Check if the file size is correct
+    if os.path.getsize(file_path) == 0:
+        return "Failed to save the file properly"
+
+    file_extension = file.name.split('.')[-1].lower()
+    if file_extension == 'pdf':
+        result = read_pdf(file_path)
+    elif file_extension == 'docx':
+        result = read_docx(file_path)
+    elif file_extension in ['jpg', 'jpeg', 'png']:
+        result = read_image(file_path)
+    else:
+        result = "Unsupported file format"
+    
+    result_output.set_text(result)
+
+    # Add download link
+    ui.link(f"Download {file.name}", file_path).classes("text-link")
 
 
-# UI & API - Flask Web App Setup (Already handled above)
-def build_ui():
-    """Create UI interface for the user to interact with."""
-    pass
+# NiceGUI UI
 
-def setup_api():
-    """Setup API integration."""
-    pass
+with ui.column():
+    ui.label('Upload a file (PDF, DOCX, or Image):')
+    upload_button = ui.upload(on_upload=upload_file)
+
+    result_label = ui.label('Extracted Resume Data:').classes('text-h6')
+    result_output = ui.label("").classes('text-body1')
 
 
-# Main entry point for running the app
-if __name__ == "__main__":
-    app.run(debug=True)
+# Start the NiceGUI app
+ui.run()
