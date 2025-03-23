@@ -23,7 +23,7 @@ def query(query):
     )
     return chat_completion.choices[0].message.content
 
-with ui.tabs().classes('w-full') as tabs:
+with ui.tabs().classes("w-full text-lg font-semibold text-gray-700 border-b") as tabs:
     one = ui.tab('Introduction')
     two = ui.tab('features')
     three = ui.tab('Ask about your resume')
@@ -31,38 +31,35 @@ with ui.tabs().classes('w-full') as tabs:
     five = ui.tab('Chat with our helper')
 with ui.tab_panels(tabs, value=two).classes('w-full'):
 
-
-
     with ui.tab_panel(one):
         # Introduction Section
-        with ui.card().classes("m-4 p-6 shadow-lg bg-gray-100"):
-            ui.label("Set your sights HIGHER with HireSite!").classes("text-2xl font-bold text-blue-700")
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            ui.label("Set your sights HIGHER with HireSite!").classes("text-4xl font-extrabold text-blue-700")
             ui.label(
             "Your personal AI tool for all things CV. It helps recruiters sort through resumes, rank them based on quality, "
             "and provides personal advice with specific tips to improve your resume. It can also identify your strengths and weaknesses."
-            ).classes("text-md")
+            ).classes("text-lg text-gray-800")
 
 
 
     with ui.tab_panel(two):
-        with ui.card().classes("m-4 p-6 shadow-lg bg-gray-100"):
-            ui.label("✨ Features").classes("text-xl font-bold text-blue-700 mb-2")
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            ui.label("✨ Features").classes("text-3xl font-extrabold text-blue-700 mb-2")
             features = [
                 "AI-powered resume ranking",
                 "Personalized feedback on strengths & weaknesses",
                 "Resume quality analysis (keywords, experience, readability)",
                 "Chat section for specific resume-related queries",
                 "User-friendly UI for easy interaction"
-    ]
+            ]
             for feature in features:
-                ui.label(feature).classes("text-md")
-
+                ui.label(feature).classes("text-lg text-gray-700")
 
 
 
     with ui.tab_panel(three):
         # Upload Section
-        with ui.card().classes("m-4 p-6 shadow-lg bg-gray-100"):
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             with ui.dialog().props('full-width') as dialog:
                 with ui.card():
                     content = ui.markdown()
@@ -75,24 +72,26 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
 
                 content.set_content(text)  # Display extracted text
                 dialog.open()
-            ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full')
+            ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
 
 
-        with ui.card().classes("m-4 p-6 shadow-lg bg-gray-100"):
-            ui.label("ai review").classes("text-xl font-bold text-blue-700 mb-2")
-            chat_input = ui.input("Here is our ai's review of your resume").classes("w-full p-2 border rounded")
-            chat_output = ui.label("").classes("mt-4 text-md text-gray-800")
+
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            ui.label("AI review").classes("text-3xl font-extrabold text-blue-700 mb-2")
+            #chat_output = ui.label("Here is our AI's review of your resume").classes("w-full p-4 border-2 border-gray-300 rounded-lg text-gray-800")
+            chat_output = ui.label("Here is our AI's review of your resume").classes("mt-4 text-lg text-gray-800")
 
             def process_question():
-                question = chat_input.value
-                if question:
-                       chat_output.set_text(f"Identify the strengths and weaknesses in this resume" + ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full'))
+                ui.button(f"AI Response: {query("rate this resume on a scale of 1-10, identify strengths and weaknesses, tell me what to improve on and what is really good, give a rough estimate of the quality of companies I could get in to with this resume, be honest, dont try and sugarcoat and make sure to give credit where credit is due")}")
 
-                ui.button("Submit", on_click=process_question).classes("bg-blue-600 text-white px-4 py-2 rounded mt-2")
+            ui.button("Give thoughts", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
+
+
+
 
     with ui.tab_panel(five):
         # Upload Section
-        with ui.card().classes("m-4 p-6 shadow-lg bg-gray-100"):
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             with ui.dialog().props('full-width') as dialog:
                 with ui.card():
                     content = ui.markdown()
@@ -106,93 +105,27 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
                 content.set_content(text)  # Display extracted text
                 dialog.open()
 
-            ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full')
+            ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
 
         # Chat Section
-        with ui.card().classes("m-4 p-6 shadow-lg bg-gray-100"):
-            ui.label("Ask AI About Your Resume").classes("text-xl font-bold text-blue-700 mb-2")
-            chat_input = ui.input("Ask something...").classes("w-full p-2 border rounded")
-            chat_output = ui.label("").classes("mt-4 text-md text-gray-800")
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            ui.label("Ask AI About Your Resume").classes("text-3xl font-extrabold text-blue-700 mb-2")
+            chat_input = ui.input("Ask something...").classes("w-full p-4 border-2 border-gray-300 rounded-lg text-gray-800")
+            chat_output = ui.label("").classes("mt-4 text-lg text-gray-800")
 
             def process_question():
                 question = chat_input.value
                 if question:
                     chat_output.set_text(f"AI Response: {query(question)}")
 
-            ui.button("Submit", on_click=process_question).classes("bg-blue-600 text-white px-4 py-2 rounded mt-2")
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            ui.button("Submit", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
 
 
 
 
 # App Header
-with ui.header().classes("bg-blue-700 text-white p-4 text-center"):
-    ui.label("HireSite - AI Resume Assistant").classes("text-3xl font-bold")
-
-
+with ui.header().classes("bg-blue-700 text-white p-8 text-center"):
+    ui.label("HireSite - AI Resume Assistant").classes("text-5xl font-extrabold")
 
 
 
