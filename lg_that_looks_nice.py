@@ -67,11 +67,11 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             ui.label("✨ Features").classes("text-4xl font-extrabold text-blue-700 mb-4")
             features = [
-                {"title": "AI-powered resume ranking", "icon": "📊"},
-                {"title": "Personalized feedback on strengths & weaknesses", "icon": "📝"},
-                {"title": "Resume quality analysis (keywords, experience, readability)", "icon": "🔍"},
-                {"title": "Chat section for specific resume-related queries", "icon": "💬"},
-                {"title": "User-friendly UI for easy interaction", "icon": "💡"}
+                {"title": "AI-powered resume ranking"},
+                {"title": "Personalized feedback on strengths & weaknesses"},
+                {"title": "Resume quality analysis (keywords, experience, readability)"},
+                {"title": "Chat section for specific resume-related queries"},
+                {"title": "User-friendly UI for easy interaction"}
             ]
             with ui.column().classes("space-y-4"):
                 for feature in features:
