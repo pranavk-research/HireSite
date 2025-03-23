@@ -3,14 +3,15 @@ import json
 from groq import Groq
 from nicegui import ui, events
 import base64
-from io import StringIO 
-import fitz 
+from io import StringIO
+import fitz
 
 client = Groq(
     api_key="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"
 )
 
 test = "showering"
+
 def query(query):
     chat_completion = client.chat.completions.create(
         messages=[
@@ -25,9 +26,9 @@ def query(query):
 
 with ui.tabs().classes("w-full text-lg font-semibold text-gray-700 border-b") as tabs:
     one = ui.tab('Introduction')
-    two = ui.tab('features')
+    two = ui.tab('Features')
     three = ui.tab('Ask about your resume')
-    four = ui.tab('rank resumes')
+    four = ui.tab('Rank resumes')
     five = ui.tab('Chat with our helper')
 
 with ui.tab_panels(tabs, value=two).classes('w-full'):
@@ -53,7 +54,6 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
                         "businesses alike. Our mission is to make the hiring process smarter, faster, and more efficient."
                     ).classes("text-md text-gray-700 mt-4")
 
-                # Meet the Makers Box 2
                 with ui.card().classes("p-6 rounded-xl bg-white shadow-md border border-gray-300 w-full"):
                     ui.label("Meet the Makers").classes("text-2xl font-semibold text-blue-700 mb-2")
                     ui.image("https://via.placeholder.com/150", alt="Image of Makers").classes("w-full rounded-lg")
@@ -97,7 +97,7 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
             ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
 
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-            ui.label("AI review").classes("text-3xl font-extrabold text-blue-700 mb-2")
+            ui.label("AI Review").classes("text-3xl font-extrabold text-blue-700 mb-2")
             chat_input = ui.input("Here is our AI's review of your resume").classes("w-full p-4 border-2 border-gray-300 rounded-lg text-gray-800")
             chat_output = ui.label("").classes("mt-4 text-lg text-gray-800")
 
