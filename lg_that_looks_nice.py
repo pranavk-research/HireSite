@@ -40,38 +40,80 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
             "Your personal AI tool for all things CV. It helps recruiters sort through resumes, rank them based on quality, "
             "and provides personal advice with specific tips to improve your resume. It can also identify your strengths and weaknesses."
             ).classes("text-lg text-gray-800")
-
+            
         # About the Makers Section
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-            ui.label("About the Makers").classes("text-3xl font-extrabold text-blue-700 mb-2")
-
-            with ui.column().classes("space-y-4 mt-4"):
-                # Pranav Kaushik
-                ui.label("Pranav Kaushik").classes("text-xl font-semibold text-blue-600")
-                ui.label(
-                    "Pranav is a passionate AI enthusiast and developer with a background in machine learning and data science. "
-                    "He is dedicated to creating AI-powered tools to simplify complex processes and enhance productivity."
-                ).classes("text-md text-gray-700")
-
-                # Avinash Karthik
-                ui.label("Avinash Karthik").classes("text-xl font-semibold text-blue-600")
-                ui.label(
-                    "Avinash is a software engineer with a focus on AI and system design. With a passion for building scalable "
-                    "solutions, he strives to improve processes through innovative approaches and cutting-edge technology."
-                ).classes("text-md text-gray-700")
+            ui.label("About the Makers").classes("text-3xl font-extrabold text-blue-700 mb-4")
+            ui.label("Pranav Kaushik - Co-Founder and AI Specialist").classes("text-lg text-gray-700 font-semibold mb-2")
+            ui.label(
+                "Pranav is a backend engineer with a knack for building scalable systems. He oversees the development of HireSite's backend architecture, " 
+                "ensuring that all features run smoothly and efficiently. He is committed to delivering a seamless user experience with an emphasis on performance."
+            ).classes("text-md text-gray-700 mb-4")
+            ui.label("Avinash Karthik - Co-Founder and Backend Engineer").classes("text-lg text-gray-700 font-semibold mb-2")
+            ui.label(
+                "Avinash is a passionate AI enthusiast and developer. He specializes in AI-driven applications and has a deep interest in machine learning. "
+                "He is responsible for leading the development of HireSite's AI algorithms and ensuring the platform's powerful and accurate performance."
+            ).classes("text-md text-gray-700")
 
     with ui.tab_panel(two):
+        # Expanded Features Section
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             ui.label("✨ Features").classes("text-3xl font-extrabold text-blue-700 mb-2")
+            
+            # Introduction to features
+            ui.label(
+                "HireSite offers a comprehensive suite of AI-powered tools designed to optimize and improve the resume "
+                "review process for recruiters and job seekers alike. From ranking resumes based on quality to providing "
+                "personalized advice, our platform takes your CV to the next level."
+            ).classes("text-lg text-gray-700 mb-4")
+
             features = [
-                "AI-powered resume ranking",
-                "Personalized feedback on strengths & weaknesses",
-                "Resume quality analysis (keywords, experience, readability)",
-                "Chat section for specific resume-related queries",
-                "User-friendly UI for easy interaction"
+                ("AI-powered resume ranking", 
+                 "Utilize advanced machine learning algorithms to rank resumes based on quality. The AI takes into account "
+                 "key factors such as experience, skills, keywords, and formatting, ensuring that recruiters see the most "
+                 "relevant and impactful resumes first."),
+                 
+                ("Personalized feedback on strengths & weaknesses", 
+                 "Get actionable insights on your resume's strengths and areas for improvement. The AI identifies critical "
+                 "elements that can make a resume stand out and suggests practical changes to increase the chances of landing "
+                 "the perfect job."),
+                 
+                ("Resume quality analysis (keywords, experience, readability)", 
+                 "Evaluate your resume's quality based on specific criteria such as keyword optimization, readability, and "
+                 "overall experience alignment with the target job role. Our system highlights key sections that need refinement "
+                 "and ensures your resume is polished and professional."),
+                 
+                ("Chat section for specific resume-related queries", 
+                 "Have a specific question about your resume or need advice on a particular section? Use the AI-powered chat to "
+                 "ask questions about your resume’s structure, content, or layout. The assistant provides tailored responses, "
+                 "helping you improve your CV quickly."),
+                 
+                ("User-friendly UI for easy interaction", 
+                 "Our platform is designed with ease of use in mind. With an intuitive interface and easy navigation, you can "
+                 "upload resumes, interact with the AI assistant, and get instant feedback, making it perfect for users with "
+                 "varying levels of tech proficiency."),
+                 
+                ("Automated formatting suggestions", 
+                 "The AI not only reviews your resume’s content but also suggests improvements in formatting and presentation. "
+                 "Ensure your resume looks professional with a clean, modern layout that recruiters will love."),
+                 
+                ("Keyword optimization for Applicant Tracking Systems (ATS)", 
+                 "Our AI ensures your resume passes through ATS systems by analyzing it for relevant keywords that match the job "
+                 "description. By optimizing your resume for ATS, you increase your chances of getting noticed by recruiters."),
+                 
+                ("Professional tips and industry-specific recommendations", 
+                 "Receive specific resume improvement tips tailored to your industry. Whether you're in tech, healthcare, or finance, "
+                 "our AI suggests the best ways to highlight your experience and skills, ensuring your resume aligns with industry standards."),
+                 
+                ("Interactive report generation", 
+                 "Generate a detailed report that highlights all feedback, suggestions, and areas of improvement on your resume. "
+                 "This report can be used to track your progress and ensure that you’re constantly enhancing your resume for future opportunities.")
             ]
-            for feature in features:
-                ui.label(feature).classes("text-lg text-gray-700")
+            
+            for feature, description in features:
+                with ui.card().classes("p-4 bg-blue-50 rounded-lg shadow-md mb-4"):
+                    ui.label(feature).classes("text-xl font-semibold text-blue-600 mb-2")
+                    ui.label(description).classes("text-md text-gray-700")
 
     with ui.tab_panel(three):
         # Upload Section
