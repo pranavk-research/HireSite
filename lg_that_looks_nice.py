@@ -45,18 +45,18 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
             ).classes("text-lg text-gray-800 mt-4")
 
             with ui.row().classes("space-x-4 mt-6"):
+ 
                 with ui.card().classes("p-6 rounded-xl bg-white shadow-md border border-gray-300 w-full"):
                     ui.label("Meet the Makers").classes("text-2xl font-semibold text-blue-700 mb-2")
-                    ui.image("https://via.placeholder.com/150", alt="Image of Makers").classes("w-full rounded-lg")
                     ui.label(
                         "We are a passionate team of AI enthusiasts and tech innovators. With backgrounds in machine learning, "
                         "data science, and software engineering, we are committed to creating tools that empower individuals and "
                         "businesses alike. Our mission is to make the hiring process smarter, faster, and more efficient."
                     ).classes("text-md text-gray-700 mt-4")
 
+
                 with ui.card().classes("p-6 rounded-xl bg-white shadow-md border border-gray-300 w-full"):
                     ui.label("Meet the Makers").classes("text-2xl font-semibold text-blue-700 mb-2")
-                    ui.image("https://via.placeholder.com/150", alt="Image of Makers").classes("w-full rounded-lg")
                     ui.label(
                         "Our journey began with a shared vision to transform recruitment with the power of AI. By combining cutting-edge "
                         "technology with our deep understanding of hiring trends, we built HireSite to simplify and revolutionize the way "
