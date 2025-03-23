@@ -25,10 +25,11 @@ def query(query):
 
 with ui.tabs().classes("w-full text-lg font-semibold text-gray-700 border-b") as tabs:
     one = ui.tab('Introduction')
-    two = ui.tab('features')
+    two = ui.tab('Features')
     three = ui.tab('Ask about your resume')
-    four = ui.tab('rank resumes')
+    four = ui.tab('Rank resumes')
     five = ui.tab('Chat with our helper')
+
 with ui.tab_panels(tabs, value=two).classes('w-full'):
 
     with ui.tab_panel(one):
@@ -40,7 +41,24 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
             "and provides personal advice with specific tips to improve your resume. It can also identify your strengths and weaknesses."
             ).classes("text-lg text-gray-800")
 
+        # About the Makers Section
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            ui.label("About the Makers").classes("text-3xl font-extrabold text-blue-700 mb-2")
 
+            with ui.column().classes("space-y-4 mt-4"):
+                # Pranav Kaushik
+                ui.label("Pranav Kaushik").classes("text-xl font-semibold text-blue-600")
+                ui.label(
+                    "Pranav is a passionate AI enthusiast and developer with a background in machine learning and data science. "
+                    "He is dedicated to creating AI-powered tools to simplify complex processes and enhance productivity."
+                ).classes("text-md text-gray-700")
+
+                # Avinash Karthik
+                ui.label("Avinash Karthik").classes("text-xl font-semibold text-blue-600")
+                ui.label(
+                    "Avinash is a software engineer with a focus on AI and system design. With a passion for building scalable "
+                    "solutions, he strives to improve processes through innovative approaches and cutting-edge technology."
+                ).classes("text-md text-gray-700")
 
     with ui.tab_panel(two):
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
@@ -54,8 +72,6 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
             ]
             for feature in features:
                 ui.label(feature).classes("text-lg text-gray-700")
-
-
 
     with ui.tab_panel(three):
         # Upload Section
@@ -74,8 +90,6 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
                 dialog.open()
             ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
 
-
-
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             ui.label("AI review").classes("text-3xl font-extrabold text-blue-700 mb-2")
             chat_input = ui.input("Here is our AI's review of your resume").classes("w-full p-4 border-2 border-gray-300 rounded-lg text-gray-800")
@@ -87,8 +101,6 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
                     chat_output.set_text(f"Identify the strengths and weaknesses in this resume" + ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full'))
 
             ui.button("Submit", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
-
-
 
     with ui.tab_panel(five):
         # Upload Section
@@ -121,15 +133,9 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
 
             ui.button("Submit", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
 
-
-
-
 # App Header
 with ui.header().classes("bg-blue-700 text-white p-8 text-center"):
     ui.label("HireSite - AI Resume Assistant").classes("text-5xl font-extrabold")
-
-
-
 
 # Run App
 ui.run(title="HireSite - AI Resume Tool", dark=False)
