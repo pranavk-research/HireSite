@@ -44,12 +44,12 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
         # About the Makers Section
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             ui.label("About the Makers").classes("text-3xl font-extrabold text-blue-700 mb-4")
-            ui.label("Pranav Kaushik - Co-Founder and AI Specialist").classes("text-lg text-gray-700 font-semibold mb-2")
+            ui.label("Pranav Kaushik - Co-Founder and Backend Engineer").classes("text-lg text-gray-700 font-semibold mb-2")
             ui.label(
                 "Pranav is a backend engineer with a knack for building scalable systems. He oversees the development of HireSite's backend architecture, " 
                 "ensuring that all features run smoothly and efficiently. He is committed to delivering a seamless user experience with an emphasis on performance."
             ).classes("text-md text-gray-700 mb-4")
-            ui.label("Avinash Karthik - Co-Founder and Backend Engineer").classes("text-lg text-gray-700 font-semibold mb-2")
+            ui.label("Avinash Karthik - Co-Founder and AI Specialist").classes("text-lg text-gray-700 font-semibold mb-2")
             ui.label(
                 "Avinash is a passionate AI enthusiast and developer. He specializes in AI-driven applications and has a deep interest in machine learning. "
                 "He is responsible for leading the development of HireSite's AI algorithms and ensuring the platform's powerful and accurate performance."
