@@ -1,0 +1,56 @@
+{
+    "Experience": [
+        {
+            "Job Title": "Software Engineer",
+            "Company": "Tech Corp",
+            "Start Date": "January 2020",
+            "End Date": "Present",
+            "Description": "Developed and maintained web applications using Python, Flask, and JavaScript."
+        },
+        {
+            "Job Title": "Junior Developer",
+            "Company": "Web Solutions",
+            "Start Date": "June 2018",
+            "End Date": "December 2019",
+            "Description": "Assisted in the development of internal tools and client-facing websites using JavaScript and PHP."
+        }
+    ],
+    "Education": [
+        {
+            "Degree": "Bachelor of Science in Computer Science",
+            "Institution": "University of Example",
+            "Start Date": "September 2014",
+            "End Date": "May 2018",
+            "GPA": "3.8"
+        }
+    ],
+    "Skills": [
+        "Python",
+        "Flask",
+        "JavaScript",
+        "React",
+        "HTML/CSS",
+        "SQL",
+        "Machine Learning"
+    ],
+    "Projects": [
+        {
+            "Project Title": "Personal Portfolio",
+            "Description": "A personal portfolio website showcasing my work, skills, and resume. Built with React and Node.js.",
+            "Technologies": [
+                "React",
+                "Node.js",
+                "MongoDB"
+            ]
+        },
+        {
+            "Project Title": "AI Chatbot",
+            "Description": "An AI-based chatbot that helps answer frequently asked questions about a product. Built with Python and TensorFlow.",
+            "Technologies": [
+                "Python",
+                "TensorFlow",
+                "Flask"
+            ]
+        }
+    ]
+}
