@@ -69,17 +69,19 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
 
 
     with ui.tab_panel(two):
-        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-            ui.label("✨ Features").classes("text-3xl font-extrabold text-blue-700 mb-2")
-            features = [
-                "AI-powered resume ranking",
-                "Personalized feedback on strengths & weaknesses",
-                "Resume quality analysis (keywords, experience, readability)",
-                "Chat section for specific resume-related queries",
-                "User-friendly UI for easy interaction"
-            ]
+    with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+        ui.label("✨ Features").classes("text-4xl font-extrabold text-blue-700 mb-4")
+        features = [
+            {"title": "AI-powered resume ranking", "icon": "📊"},
+            {"title": "Personalized feedback on strengths & weaknesses", "icon": "📝"},
+            {"title": "Resume quality analysis (keywords, experience, readability)", "icon": "🔍"},
+            {"title": "Chat section for specific resume-related queries", "icon": "💬"},
+            {"title": "User-friendly UI for easy interaction", "icon": "💡"}
+        ]
+        with ui.column().classes("space-y-4"):
             for feature in features:
-                ui.label(feature).classes("text-lg text-gray-700")
+                with ui.card().classes("p-4 rounded-xl bg-gray-50 shadow-md border border-gray-300 hover:bg-blue-50"):
+                    ui.label(feature["icon"] + " " + feature["title"]).classes("text-lg text-gray-800 font-medium")
 
 
 
