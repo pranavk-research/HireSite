@@ -116,9 +116,4 @@ with ui.row().classes('justify-center items-center w-full h-[80vh]'):
         ui.label("Roast:").props('autogrow').classes('max-w-full').style('font-size: 2em; color: #ff2600;') # "Roast" label in accent color
         output_label = ui.label("Status: Waiting for input...").style('margin-top: 10px; font-size: 2em;') # Output label
 
-
-# Footer
-with ui.footer().style('background-color: #141E46; border-top: 2px solid #ff2600; color: #ff2600;'): # Footer style modified
-    ui.label("Aditya, Aarush, Edan").style('font-size: 1em;')
-
 ui.run()
