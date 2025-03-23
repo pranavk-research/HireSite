@@ -1,3 +1,9 @@
 LG Hacks Project
 
-main.py - main logic to read the file and parse the data in json format for readability
+**lg.py - our main file**
+  - Uses the Groq api for amazing responses
+  - We used NiceGUI for our frontend
+  - Language used is Python
+
+**resume_example.pdf** - example resume
+  - You can use this to test the code
