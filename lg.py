@@ -214,6 +214,7 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
                     content = ui.markdown()
 
             def handle_upload(e: events.UploadEventArguments):
+                global uploaded_resume_text
                 file_data = e.content.read()  # Read file as bytes
 
                 with fitz.open(stream=file_data, filetype="pdf") as doc:
