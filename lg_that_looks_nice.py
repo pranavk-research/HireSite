@@ -4,13 +4,16 @@ from groq import Groq
 from nicegui import ui, events
 import base64
 from io import StringIO 
-import fitz 
+import fitz
 
+# Initialize Groq API client
 client = Groq(
     api_key="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"
 )
 
 test = "showering"
+
+# Define function to query the Groq API
 def query(query):
     try:
         chat_completion = client.chat.completions.create(
@@ -23,24 +26,26 @@ def query(query):
     except Exception as e:
         print("API Error:", str(e))  # Debug print
         return f"Error: {str(e)}"
-    
+
+# Set up the NiceGUI UI tabs and panels
 with ui.tabs().classes("w-full text-lg font-semibold text-gray-700 border-b") as tabs:
     one = ui.tab('Introduction')
-    two = ui.tab('features')
+    two = ui.tab('Features')
     three = ui.tab('Ask about your resume')
-    four = ui.tab('rank resumes')
+    four = ui.tab('Rank resumes')
     five = ui.tab('Chat with our helper')
-with ui.tab_panels(tabs, value=two).classes('w-full'):
 
+with ui.tab_panels(tabs, value=two).classes('w-full'):
+    # Introduction Tab
     with ui.tab_panel(one):
         # Introduction Section
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             ui.label("Set your sights HIGHER with HireSite!").classes("text-4xl font-extrabold text-blue-700")
             ui.label(
-            "Your personal AI tool for all things CV. It helps recruiters sort through resumes, rank them based on quality, "
-            "and provides personal advice with specific tips to improve your resume. It can also identify your strengths and weaknesses."
+                "Your personal AI tool for all things CV. It helps recruiters sort through resumes, rank them based on quality, "
+                "and provides personal advice with specific tips to improve your resume. It can also identify your strengths and weaknesses."
             ).classes("text-lg text-gray-800")
-            
+
         # About the Makers Section
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             ui.label("About the Makers").classes("text-3xl font-extrabold text-blue-700 mb-4")
@@ -55,7 +60,7 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
                 "ensuring that all features run smoothly and efficiently. He is committed to delivering a seamless user experience with an emphasis on performance."
             ).classes("text-md text-gray-700 mb-4")
 
-
+    # Features Tab
     with ui.tab_panel(two):
         # Expanded Features Section
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
@@ -116,156 +121,104 @@ with ui.tab_panels(tabs, value=two).classes('w-full'):
                     ui.label(feature).classes("text-xl font-semibold text-blue-600 mb-2")
                     ui.label(description).classes("text-md text-gray-700")
 
+    # Ask about Your Resume Tab
+    with ui.tab_panel(three):
+        # Upload Section
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            with ui.dialog().props('full-width') as dialog:
+                with ui.card():
+                    content = ui.markdown()
 
-with ui.tab_panel(three):
-    # Upload Section
-    with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-        with ui.dialog().props('full-width') as dialog:
-            with ui.card():
-                content = ui.markdown()
+            def handle_upload(e: events.UploadEventArguments):
+                global uploaded_resume_text
+                file_data = e.content.read()
+                with fitz.open(stream=file_data, filetype="pdf") as doc:
+                    uploaded_resume_text = "\n".join([page.get_text() for page in doc])
+                content.set_content(uploaded_resume_text)
+                dialog.open()
 
-        def handle_upload(e: events.UploadEventArguments):
-            global uploaded_resume_text
-            file_data = e.content.read()
-            with fitz.open(stream=file_data, filetype="pdf") as doc:
-                uploaded_resume_text = "\n".join([page.get_text() for page in doc])
-            content.set_content(uploaded_resume_text)
-            dialog.open()
+            ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
 
-        ui.upload(on_upload=handle_upload).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
+        # AI Review Section with Progress Bar
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            ui.label("AI Review of Your Resume").classes("text-3xl font-extrabold text-blue-700 mb-2")
+            progress = ui.progress(0).props('max=100').classes("mt-4 w-full")
+            chat_output = ui.label("Here is the AI's detailed feedback").classes("mt-4 text-lg text-gray-800")
 
-    # AI Review Section with Progress Bar
-    with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-        ui.label("AI Review of Your Resume").classes("text-3xl font-extrabold text-blue-700 mb-2")
-        progress = ui.progress(0).props('max=100').classes("mt-4 w-full")
-        chat_output = ui.label("Here is the AI's detailed feedback").classes("mt-4 text-lg text-gray-800")
+            def process_question():
+                global uploaded_resume_text
+                if uploaded_resume_text:
+                    question = '''rate this resume on a scale of 1-10, identify strengths and weaknesses,
+                                tell me what to improve on and what is really good, 
+                                give a rough estimate of the quality of companies I could get into with this resume, 
+                                be honest, and make sure to give credit where credit is due.
+                                Please use bullet points for a clean output.'''
+                    progress.set_value(50)  # Example of halfway through processing
+                    response = query(f"{question}\n\nResume Content:\n{uploaded_resume_text}")
+                    progress.set_value(100)  # Completed
+                    formatted_response = format_response_for_readability(response)
+                    chat_output.set_text(f"AI Response:\n{formatted_response}")
+                else:
+                    ui.button("Please upload a resume first!")
 
-        def process_question():
-            global uploaded_resume_text
-            if uploaded_resume_text:
-                question = '''rate this resume on a scale of 1-10, identify strengths and weaknesses,
-                            tell me what to improve on and what is really good, 
-                            give a rough estimate of the quality of companies I could get into with this resume, 
-                            be honest, and make sure to give credit where credit is due.
-                            Please use bullet points for a clean output.'''
-                progress.set_value(50)  # Example of halfway through processing
-                response = query(f"{question}\n\nResume Content:\n{uploaded_resume_text}")
-                progress.set_value(100)  # Completed
-                formatted_response = format_response_for_readability(response)
-                chat_output.set_text(f"AI Response:\n{formatted_response}")
-            else:
-                ui.button("Please upload a resume first!")
+            ui.button("Get Detailed Feedback", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
 
-        ui.button("Get Detailed Feedback", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
-
-def format_response_for_readability(response):
-    # Format the response with bullet points and headings for strengths and weaknesses.
-    return response.replace("\n", "\n• ")
-
-
-
-
-
+    # Rank Resumes Tab
     with ui.tab_panel(four):
-    # Upload Section
-    with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-        with ui.dialog().props('full-width') as dialog:
-            with ui.card():
-                content = ui.markdown()
+        # Upload Section
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            with ui.dialog().props('full-width') as dialog:
+                with ui.card():
+                    content = ui.markdown()
 
-        def handle_upload(e: events.UploadEventArguments):
-            global uploaded_resume_text
-            file_data = e.content.read()
-            with fitz.open(stream=file_data, filetype="pdf") as doc:
-                uploaded_resume_text += "\n".join([page.get_text() for page in doc])
-            content.set_content(uploaded_resume_text)
-            dialog.open()
+            def handle_upload(e: events.UploadEventArguments):
+                global uploaded_resume_text
+                file_data = e.content.read()
+                with fitz.open(stream=file_data, filetype="pdf") as doc:
+                    uploaded_resume_text += "\n".join([page.get_text() for page in doc])
+                content.set_content(uploaded_resume_text)
+                dialog.open()
 
-        ui.upload(on_upload=handle_upload, multiple=True).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
+            ui.upload(on_upload=handle_upload, multiple=True).props('accept=.pdf').classes('max-w-full p-6 border-2 border-dashed border-gray-400 rounded-lg')
 
-    # Ranking Section with Interactive Table
-    with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-        ui.label("Rank Resumes Based on AI Assessment").classes("text-3xl font-extrabold text-blue-700 mb-2")
-        
-        table = ui.table().classes("w-full mb-4")
-        table.headers = ["Resume", "Ranking", "Strengths", "Weaknesses", "Download"]
-        
-        def process_question():
-            global uploaded_resume_text
-            if uploaded_resume_text:
-                question = '''rank each of these resumes on a scale of 1-10 and return them in order from best to worst'''
-                response = query(f"{question}\n\nResume Content:\n{uploaded_resume_text}")
-                rankings = parse_ranking_response(response)
-                for resume, rank, strengths, weaknesses in rankings:
-                    table.add_row([resume, rank, strengths, weaknesses, ui.button("Download").on_click(lambda: download_resume(resume))])
-            else:
-                ui.button("Please upload a resume first!")
+        # Ranking Section with Interactive Table
+        with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
+            ui.label("Rank Resumes Based on AI Assessment").classes("text-3xl font-extrabold text-blue-700 mb-2")
+            table = ui.table().classes("w-full mb-4")
+            table.headers = ["Resume", "Ranking", "Strengths", "Weaknesses", "Download"]
 
-        ui.button("Rank Resumes", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
+            def process_question():
+                global uploaded_resume_text
+                if uploaded_resume_text:
+                    question = '''rank each of these resumes on a scale of 1-10 and return them in order from best to worst'''
+                    response = query(f"{question}\n\nResume Content:\n{uploaded_resume_text}")
+                    rankings = parse_ranking_response(response)
+                    for resume, rank, strengths, weaknesses in rankings:
+                        table.add_row([resume, rank, strengths, weaknesses, ui.button("Download").on_click(lambda: download_resume(resume))])
+                else:
+                    ui.button("Please upload a resume first!")
 
-def parse_ranking_response(response):
-    # Example parsing the AI response for ranking
-    rankings = [
-        ("Resume 1", "8/10", "Strong experience, good formatting", "Needs better keywords"),
-        ("Resume 2", "7/10", "Clear structure, good skills", "Short on relevant work experience")
-    ]
-    return rankings
+            ui.button("Rank Resumes", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
 
-def download_resume(resume_name):
-    # Placeholder function for downloading resume
-    print(f"Downloading {resume_name}")
-
-
-
-
-
-
-
-
-
-
-
-
+    # Chat Tab
     with ui.tab_panel(five):
-    # Chat Section
-    with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
-        ui.label("Ask AI About Your Resume").classes("text-3xl font-extrabold text-blue-700 mb-2")
-        chat_input = ui.input("Ask something about your resume...").classes("w-full p-4 border-2 border-gray-300 rounded-lg text-gray-800")
-        chat_output = ui.label("").classes("mt-4 text-lg text-gray-800")
-
-        def process_question():
-            question = chat_input.value
-            if question:
-                # Enhance response with follow-up or additional suggestions
-                ai_response = query(question)
-                follow_up = f"Based on your resume, I recommend checking these areas: [Strengths, Weaknesses, etc.]"
-                chat_output.set_text(f"AI Response: {ai_response}\n\n{follow_up}")
-
-        ui.button("Submit", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
-
-
         # Chat Section
         with ui.card().classes("m-4 p-6 rounded-xl bg-white shadow-md border border-gray-300"):
             ui.label("Ask AI About Your Resume").classes("text-3xl font-extrabold text-blue-700 mb-2")
-            chat_input = ui.input("Ask something...").classes("w-full p-4 border-2 border-gray-300 rounded-lg text-gray-800")
+            chat_input = ui.input("Ask something about your resume...").classes("w-full p-4 border-2 border-gray-300 rounded-lg text-gray-800")
             chat_output = ui.label("").classes("mt-4 text-lg text-gray-800")
 
             def process_question():
                 question = chat_input.value
                 if question:
-                    chat_output.set_text(f"AI Response: {query(question)}")
+                    ai_response = query(question)
+                    follow_up = f"Based on your resume, I recommend checking these areas: [Strengths, Weaknesses, etc.]"
+                    chat_output.set_text(f"AI Response: {ai_response}\n\n{follow_up}")
 
             ui.button("Submit", on_click=process_question).classes("bg-blue-500 hover:bg-blue-600 transition-all text-white px-6 py-3 rounded-lg shadow-md mt-2")
 
-
-
-
-# App Header
 with ui.header().classes("bg-blue-700 text-white p-8 text-center"):
     ui.label("HireSite - AI Resume Assistant").classes("text-5xl font-extrabold")
-
-
-
 
 # Run App
 ui.run(title="HireSite - AI Resume Tool", dark=False)
