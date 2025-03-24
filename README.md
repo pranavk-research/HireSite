@@ -5,5 +5,5 @@ LG Hacks Project
   - We used NiceGUI for our frontend
   - Language used is Python
 
-**resume_example.pdf** - example resume
-  - You can use this to test the code
+**resume_1, 2, etc...** - example resumes
+  - You can use these to test the code
